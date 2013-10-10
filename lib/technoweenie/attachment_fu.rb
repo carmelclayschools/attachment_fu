@@ -198,12 +198,11 @@ module Technoweenie # :nodoc:
         base.after_destroy :destroy_file
         base.after_validation :process_attachment
         base.after_save :after_process_attachment
-        #if defined?(::ActiveSupport::Callbacks)
-        #  base.define_callbacks :after_resize, :after_attachment_saved, :before_thumbnail_saved
-        #end
+        if defined?(::ActiveSupport::Callbacks)
+          base.define_callbacks :after_resize, :after_attachment_saved, :before_thumbnail_saved
+        end
       end
 
-      unless defined?(::ActiveSupport::Callbacks)
         # Callback after an image has been resized.
         #
         #   class Foo < ActiveRecord::Base
@@ -241,7 +240,6 @@ module Technoweenie # :nodoc:
         def before_thumbnail_saved(&block)
           write_inheritable_array(:before_thumbnail_saved, [block])
         end
-      end
 
       # Get the thumbnail class, which is the current attachment class by default.
       # Configure this with the :thumbnail_class option.
